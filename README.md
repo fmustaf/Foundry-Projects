@@ -1,0 +1,204 @@
+\# FoundryProjects — Monorepo for Azure Foundry QuickStarts (.NET 8)
+
+
+
+This repository is a \*\*monorepo\*\* containing multiple .NET 8 solutions for Azure AI Foundry, Semantic Kernel, and agent-based development. Each solution represents a focused QuickStart and is self-contained, while the `shared` folder provides reusable libraries and utilities.
+
+
+
+This structure keeps the repo organized, scalable, and easy to maintain as more samples and QuickStarts are added over time.
+
+
+
+---
+
+
+
+\## 🚀 Repository Structure
+
+
+
+FoundryProjects/
+
+├─ src/
+
+│  ├─ QuickStart\_Chat\_With\_Agent/
+
+│  │  ├─ QuickStart\_Chat\_With\_Agent.sln
+
+│  │  ├─ projects/
+
+│  │  └─ tests/
+
+│  │
+
+│  ├─ QuickStart-Chat-With-Model/
+
+│  │  ├─ QuickStart-Chat-With-Model.sln
+
+│  │  ├─ projects/
+
+│  │  └─ tests/
+
+│  │
+
+│  ├─ QuickStart-Create-Agent/
+
+│  │  ├─ QuickStart-Create-Agent.sln
+
+│  │  ├─ projects/
+
+│  │  └─ tests/
+
+│
+
+├─ shared/
+
+│  └─ CommonLib/
+
+│     ├─ CommonLib.csproj
+
+│     └─ (shared helpers used across all solutions)
+
+│
+
+├─ docs/
+
+│  ├─ architecture/
+
+│  └─ notebooks/
+
+│
+
+├─ .github/
+
+│  └─ workflows/
+
+│     ├─ build-chat-with-agent.yml
+
+│     ├─ build-chat-with-model.yml
+
+│     └─ build-create-agent.yml
+
+│
+
+├─ .gitignore
+
+└─ README.md
+
+
+
+---
+
+
+
+\## 🧩 Solutions Included
+
+
+
+\### \*\*1. QuickStart\_Chat\_With\_Agent\*\*
+
+Demonstrates:
+
+\- Chatting with Azure AI Foundry Agents  
+
+\- Handling messages and state  
+
+\- Integrating with Semantic Kernel or Azure REST SDKs  
+
+
+
+Includes:
+
+\- A console app  
+
+\- An xUnit test project  
+
+
+
+---
+
+
+
+\### \*\*2. QuickStart-Chat-With-Model\*\*
+
+Demonstrates:
+
+\- Direct prompts to large language models  
+
+\- System and user prompt patterns  
+
+\- Token usage and cost estimation  
+
+\- Clean response handling  
+
+
+
+Includes:
+
+\- Console app  
+
+\- xUnit tests  
+
+
+
+---
+
+
+
+\### \*\*3. QuickStart-Create-Agent\*\*
+
+Shows how to:
+
+\- Create Azure AI Foundry Agents  
+
+\- Configure function calling  
+
+\- Persist and manage agent workflows  
+
+\- Build multi-step orchestration patterns  
+
+
+
+Includes:
+
+\- Console app  
+
+\- xUnit tests  
+
+
+
+---
+
+
+
+\## 📦 Shared Code
+
+
+
+The `/shared/CommonLib` library provides optional helpers used across multiple samples:
+
+
+
+\- DTOs  
+
+\- Logging and tracing helpers  
+
+\- Token accounting utilities  
+
+\- Configuration providers  
+
+\- HttpClient extensions  
+
+\- Semantic Kernel utilities  
+
+
+
+Reference the library in any project:
+
+
+
+```bash
+
+dotnet add <project.csproj> reference ../../shared/CommonLib/CommonLib.csproj
+
