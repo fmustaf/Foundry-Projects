@@ -1,0 +1,23 @@
+name: Build - QuickStart_Chat_With_Agent
+
+on:
+  push:
+    paths:
+      - 'src/QuickStart_Chat_With_Agent/**'
+      - 'shared/**'
+  pull_request:
+    paths:
+      - 'src/QuickStart_Chat_With_Agent/**'
+      - 'shared/**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore src/QuickStart_Chat_With_Agent/QuickStart_Chat_With_Agent.sln
+      - run: dotnet build src/QuickStart_Chat_With_Agent/QuickStart_Chat_With_Agent.sln --configuration Release
+      - run: dotnet test src/QuickStart_Chat_With_Agent/QuickStart_Chat_With_Agent.sln --configuration Release --logger trx

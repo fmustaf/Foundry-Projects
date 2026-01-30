@@ -1,0 +1,23 @@
+name: Build - QuickStart-Create-Agent
+
+on:
+  push:
+    paths:
+      - 'src/QuickStart-Create-Agent/**'
+      - 'shared/**'
+  pull_request:
+    paths:
+      - 'src/QuickStart-Create-Agent/**'
+      - 'shared/**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore src/QuickStart-Create-Agent/QuickStart-Create-Agent.sln
+      - run: dotnet build src/QuickStart-Create-Agent/QuickStart-Create-Agent.sln --configuration Release
+      - run: dotnet test src/QuickStart-Create-Agent/QuickStart-Create-Agent.sln --configuration Release --logger trx

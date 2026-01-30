@@ -1,0 +1,29 @@
+## Build artifacts
+bin/
+obj/
+out/
+artifacts/
+
+## IDE files
+.vs/
+*.user
+*.suo
+
+## Rider
+.idea/
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log
+
+## Python notebooks cache
+.ipynb_checkpoints/
+
+## dotnet
+project.lock.json
+*.db
+*.mdf
+*.ldf

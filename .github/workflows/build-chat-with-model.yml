@@ -1,0 +1,23 @@
+name: Build - QuickStart-Chat-With-Model
+
+on:
+  push:
+    paths:
+      - 'src/QuickStart-Chat-With-Model/**'
+      - 'shared/**'
+  pull_request:
+    paths:
+      - 'src/QuickStart-Chat-With-Model/**'
+      - 'shared/**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore src/QuickStart-Chat-With-Model/QuickStart-Chat-With-Model.sln
+      - run: dotnet build src/QuickStart-Chat-With-Model/QuickStart-Chat-With-Model.sln --configuration Release
+      - run: dotnet test src/QuickStart-Chat-With-Model/QuickStart-Chat-With-Model.sln --configuration Release --logger trx
