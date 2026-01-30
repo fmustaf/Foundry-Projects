@@ -96,7 +96,7 @@ FoundryProjects/
 
 
 
-### \*\*1. QuickStart\_Chat\_With\_Agent\*\*
+### **1. QuickStart\_Chat\_With\_Agent**
 
 Demonstrates:
 
@@ -118,7 +118,7 @@ Includes:
 
 ---
 
-### \*\*2. QuickStart-Chat-With-Model\*\*
+### **2. QuickStart-Chat-With-Model**
 
 Demonstrates:
 
@@ -138,7 +138,7 @@ Includes:
 
 ---
 
-### \*\*3. QuickStart-Create-Agent\*\*
+### **3. QuickStart-Create-Agent**
 
 Shows how to:
 
@@ -174,9 +174,50 @@ The `/shared/CommonLib` library provides optional helpers used across multiple s
 
 - Semantic Kernel utilities  
 
+## 🔄 GitHub Actions CI
+
+Each solution has its own dedicated CI workflow, triggered only when files change in that solution's folder.
+
+| Solution                    | Workflow File                   | Trigger Path                               |
+|-----------------------------|----------------------------------|---------------------------------------------|
+| QuickStart_Chat_With_Agent  | `build-chat-with-agent.yml`     | `src/QuickStart_Chat_With_Agent/**`         |
+| QuickStart-Chat-With-Model  | `build-chat-with-model.yml`     | `src/QuickStart-Chat-With-Model/**`         |
+| QuickStart-Create-Agent     | `build-create-agent.yml`        | `src/QuickStart-Create-Agent/**`            |
+
+Each workflow performs the following steps:
+
+- `dotnet restore`  
+- `dotnet build` (targets .NET 8)  
+- `dotnet test`  
+- Publish test results to GitHub Actions  
+
+This keeps all solutions **isolated, efficient, and fast to build**, while preserving a clean monorepo GitHub Actions structure.
+
 ## Reference the library in any project:
-
 ```bash
-
 dotnet add <project.csproj> reference ../../shared/CommonLib/CommonLib.csproj
+```
 
+## 🧪 Testing
+```bash
+src/<SolutionName>/tests/
+```
+- Run tests for the entire repo:
+```bash
+dotnet test
+```
+- Run tests for a specific solution:
+```bash
+dotnet test src/QuickStart_Chat_With_Agent/QuickStart_Chat_With_Agent.sln
+```
+
+## 📘 Development Guidelines
+- Prefer relative project references (never absolute paths)
+- Keep each QuickStart self-contained
+- Use the shared folder sparingly to avoid over-coupling
+- Store diagrams in docs/architecture
+- Store demos & Python notebooks in docs/notebooks
+- Commit often and keep solutions clean and minimal
+- When solutions get large, consider generating a .slnf (solution filter)
+
+📄 License - MIT License
