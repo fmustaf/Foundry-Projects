@@ -1,8 +1,8 @@
-\# FoundryProjects — Monorepo for Azure Foundry QuickStarts (.NET 8)
+# FoundryProjects — Repo for Azure Foundry and Agent Framework Projects
 
 
 
-This repository is a \*\*monorepo\*\* containing multiple .NET 8 solutions for Azure AI Foundry, Semantic Kernel, and agent-based development. Each solution represents a focused QuickStart and is self-contained, while the `shared` folder provides reusable libraries and utilities.
+This repository is a **monorepo** containing multiple .NET solutions for Azure AI Foundry and development using Agent Framework SDK. Each solution represents a focused QuickStart and is self-contained, while the `shared` folder provides reusable libraries and utilities.
 
 
 
@@ -14,7 +14,7 @@ This structure keeps the repo organized, scalable, and easy to maintain as more 
 
 
 
-\## 🚀 Repository Structure
+## 🚀 Repository Structure
 
 
 
@@ -92,111 +92,89 @@ FoundryProjects/
 
 
 
-\## 🧩 Solutions Included
+## 🧩 Solutions Included
 
 
 
-\### \*\*1. QuickStart\_Chat\_With\_Agent\*\*
+### \*\*1. QuickStart\_Chat\_With\_Agent\*\*
 
 Demonstrates:
 
-\- Chatting with Azure AI Foundry Agents  
+- Chatting with Azure AI Foundry Agents  
 
-\- Handling messages and state  
+- Handling messages and state  
 
-\- Integrating with Semantic Kernel or Azure REST SDKs  
+- Integrating with Semantic Kernel or Azure REST SDKs  
 
 
 
 Includes:
 
-\- A console app  
+- A console app  
 
-\- An xUnit test project  
+- An xUnit test project  
 
 
 
 ---
 
-
-
-\### \*\*2. QuickStart-Chat-With-Model\*\*
+### \*\*2. QuickStart-Chat-With-Model\*\*
 
 Demonstrates:
 
-\- Direct prompts to large language models  
+- Direct prompts to large language models  
 
-\- System and user prompt patterns  
+- System and user prompt patterns  
 
-\- Token usage and cost estimation  
+- Token usage and cost estimation  
 
-\- Clean response handling  
-
-
+- Clean response handling  
 
 Includes:
 
-\- Console app  
+- Console app  
 
-\- xUnit tests  
-
-
+- xUnit tests  
 
 ---
 
-
-
-\### \*\*3. QuickStart-Create-Agent\*\*
+### \*\*3. QuickStart-Create-Agent\*\*
 
 Shows how to:
 
-\- Create Azure AI Foundry Agents  
+- Create Azure AI Foundry Agents  
 
-\- Configure function calling  
+- Configure function calling  
 
-\- Persist and manage agent workflows  
+- Persist and manage agent workflows  
 
-\- Build multi-step orchestration patterns  
-
-
+- Build multi-step orchestration patterns  
 
 Includes:
 
-\- Console app  
+- Console app  
 
-\- xUnit tests  
-
-
+- xUnit tests  
 
 ---
 
-
-
-\## 📦 Shared Code
-
-
+## 📦 Shared Code
 
 The `/shared/CommonLib` library provides optional helpers used across multiple samples:
 
+- DTOs  
 
+- Logging and tracing helpers  
 
-\- DTOs  
+- Token accounting utilities  
 
-\- Logging and tracing helpers  
+- Configuration providers  
 
-\- Token accounting utilities  
+- HttpClient extensions  
 
-\- Configuration providers  
+- Semantic Kernel utilities  
 
-\- HttpClient extensions  
-
-\- Semantic Kernel utilities  
-
-
-
-Reference the library in any project:
-
-
+## Reference the library in any project:
 
 ```bash
 
