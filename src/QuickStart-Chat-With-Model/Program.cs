@@ -27,7 +27,7 @@ namespace QuickStart_Chat_With_Model
             AgentRecord agentRecord = projectClient.Agents.GetAgent(agentName);
             Console.WriteLine($"Agent retrieved (name: {agentRecord.Name}, id: {agentRecord.Id})");
 
-            // Use the agent to generate a response            
+            // Initialize a client reference            
             ProjectResponsesClient responseClient = projectClient.OpenAI.GetProjectResponsesClientForAgent(agentRecord);
             // Use the agent to generate a response
             var response = responseClient.CreateResponse("Hello! Tell me some cool Dad jokes.");
