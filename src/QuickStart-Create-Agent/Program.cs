@@ -25,6 +25,9 @@ namespace QuickStart_Create_Agent
             //string agentName = Environment.GetEnvironmentVariable("AGENT_NAME")
             //    ?? throw new InvalidOperationException("Missing environment variable 'AGENT_NAME'");
 
+            // Connect to your project using the endpoint from your project page
+            // The AzureCliCredential will use your logged-in Azure CLI identity, make sure to run `az login` first
+            // You can use the Developer PowerShell window for this, which has Azure CLI installed and configured.
             AIProjectClient projectClient = new(new Uri(projectEndpoint), new AzureCliCredential());
 
             AgentDefinition agentDefinition = new PromptAgentDefinition(modelDeploymentName)
