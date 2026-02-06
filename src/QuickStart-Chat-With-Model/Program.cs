@@ -21,7 +21,8 @@ namespace QuickStart_Chat_With_Model
             const string agentName = "AgentBond";
 
             // Connect to your project using the endpoint from your project page
-            // The AzureCliCredential will use your logged-in Azure CLI identity, make sure to run `az login` first
+            // Using the DefaultAzureCredential, which supports various authentication methods (environment variables, managed identity, etc.).
+            // Ensure you are logged into Azure using Az Login or have the appropriate environment variables set for authentication.
             AIProjectClient projectClient = new(endpoint: new Uri(projectEndpoint), tokenProvider: new DefaultAzureCredential());
 
             AgentRecord agentRecord = projectClient.Agents.GetAgent(agentName);
