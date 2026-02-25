@@ -1,0 +1,148 @@
+﻿@model QuickStart_Chat_Web.Models.ChatViewModel
+
+@{
+    ViewData["Title"] = "AI Chat";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-robot"></i> Chat with @Model.AgentName
+                    </h4>
+                    <small>Agent ID: @Model.AgentId</small>
+                </div>
+
+                <div class="card-body" id="chatContainer" style="height: 500px; overflow-y: auto;">
+                    <div id="messagesList">
+                        <!-- Messages will be dynamically added here -->
+                    </div>
+                    <div id="loadingIndicator" class="text-center d-none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-muted">Thinking...</p>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <form id="chatForm">
+                        <div class="input-group">
+                            <input type="text"
+                                   id="messageInput"
+                                   class="form-control"
+                                   placeholder="Type your message here..."
+                                   autocomplete="off"
+                                   required />
+                            <button type="submit" class="btn btn-primary" id="sendButton">
+                                <i class="bi bi-send"></i> Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const messagesList = document.getElementById('messagesList');
+        const chatContainer = document.getElementById('chatContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const sendButton = document.getElementById('sendButton');
+
+        // Add message to chat UI
+        function addMessage(role, content, timestamp) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-3 ${role === 'user' ? 'text-end' : 'text-start'}`;
+
+            const time = new Date(timestamp).toLocaleTimeString();
+
+            messageDiv.innerHTML = `
+                <div class="d-inline-block ${role === 'user' ? 'bg-primary text-white' : 'bg-light'} rounded p-3 shadow-sm" style="max-width: 75%;">
+                    <strong>${role === 'user' ? 'You' : '@Model.AgentName'}:</strong>
+                    <p class="mb-1 mt-2">${escapeHtml(content)}</p>
+                    <small class="text-muted" style="font-size: 0.75rem;">${time}</small>
+                </div>
+            `;
+
+            messagesList.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show/hide loading indicator
+        function setLoading(isLoading) {
+            loadingIndicator.classList.toggle('d-none', !isLoading);
+            sendButton.disabled = isLoading;
+            messageInput.disabled = isLoading;
+            if (!isLoading) {
+                messageInput.focus();
+            }
+            scrollToBottom();
+        }
+
+        // Handle form submission
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message to UI
+            addMessage('user', message, new Date());
+
+            // Clear input
+            messageInput.value = '';
+
+            // Show loading
+            setLoading(true);
+
+            try {
+                const response = await fetch('@Url.Action("SendMessage", "Chat")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Add agent response to UI
+                    addMessage('assistant', data.response, data.timestamp);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error occurred'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to send message. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Focus input on load
+        messageInput.focus();
+
+        // Add welcome message
+        addMessage('assistant', 'Hello! I\'m @Model.AgentName. How can I help you today?', new Date());
+    </script>
+}
