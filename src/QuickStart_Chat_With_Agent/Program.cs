@@ -37,6 +37,7 @@ namespace QuickStart_Chat_With_Agent
                 defaultAgent: agentName,
                 defaultConversationId: conversation.Id);
 
+
             // Chat with the agent to answer questions
             ResponseResult response = responsesClient.CreateResponse("What is the size of France in square miles?");
             Console.WriteLine(response.GetOutputText());
