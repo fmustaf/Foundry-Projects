@@ -42,8 +42,6 @@ namespace Chat_WithModel_No_Agent
     },
             };
 
-
-
             ResponseResult response = client.CreateResponse(options);
 
             Console.WriteLine($"[ASSISTANT]: {response.GetOutputText()}");
