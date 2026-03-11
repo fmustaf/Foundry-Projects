@@ -15,7 +15,8 @@ namespace Chat_WithModel_No_Agent
             Console.WriteLine("Hello, World!");
 
 #pragma warning disable OPENAI001
-
+            // This works with OpenAI namespace. Now if I want to update this to use the Projects namespace, I will need to change the client and options as well. 
+            // Figure out how to do that and update the code below.
             const string deploymentName = "gpt-4.1-mini";
             const string endpoint = "https://demofaisalnewui-1423-resource.openai.azure.com/openai/v1/";
 
