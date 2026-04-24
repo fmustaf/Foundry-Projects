@@ -41,3 +41,6 @@ namespace QuickStart_Agent_Framework_Sample_One
         }
     }
 }
+
+// This is the NuGet package for the Agent Framework: 
+dotnet add package Microsoft.Agents.AI
