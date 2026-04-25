@@ -1,3 +1,7 @@
-﻿dotnet add package Azure.AI.OpenAI
+﻿//Packages to install for Azure OpenAI and Microsoft Agents AI. Identity is for authentication with 
+// Azure services, the DefaultAzureCredential class will automatically pick up the appropriate 
+// authentication method based on the environment (e.g., environment variables, managed identity, etc.).
+
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI
