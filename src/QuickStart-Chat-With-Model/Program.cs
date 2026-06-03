@@ -13,7 +13,7 @@ namespace QuickStart_Chat_With_Model
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("This sample uses just the Projects SDK, aka, Azure Foundry SDK.");
 
 #pragma warning disable OPENAI001
 
