@@ -1,0 +1,21 @@
+RAG (Retrieval-Augmented Generation) looks up relevant information and supplies
+only that information to the model. This avoids placing every possible source in
+the prompt, which would consume context space and increase token cost.
+
+An embedding is an array of floating-point values that represents the semantic
+meaning of content. The application embeds each source-text chunk and persists
+the chunk and vector in SQLite. When the user asks a question, it embeds the
+question, ranks the stored vectors by cosine similarity, and supplies the three
+closest chunks as reference material.
+
+The chat portion uses Microsoft Agent Framework. An Azure OpenAI ChatClient is
+converted to an AIAgent with AsAIAgent, and each question is run through that
+agent. Application-managed conversation turns are included in the prompt. A
+fresh agent session is used for each question so retrieved reference material
+does not become permanent chat history.
+
+Runtime settings intentionally remain unchanged:
+- API key environment variable: AI:AzureOpenAI:APIKey
+- Azure OpenAI endpoint: https://fez-msdn-openai.openai.azure.com/
+- Chat deployment: gpt-35-turbo
+- Embedding deployment: text-embedding-ada-002

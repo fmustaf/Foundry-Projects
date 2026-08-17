@@ -1,0 +1,20 @@
+This sample uses Azure OpenAI and Microsoft Agent Framework rather than
+Semantic Kernel.
+
+Startup opens mydata.db and creates the rag_embeddings table when necessary.
+If the net7perf collection has not been indexed, the app downloads the .NET 7
+performance article, removes markup, splits the content into bounded chunks,
+generates Azure OpenAI embeddings, and stores those vectors as JSON in SQLite.
+Future runs load the same persisted vectors instead of regenerating them.
+
+For each question, the app generates an embedding with the existing
+text-embedding-ada-002 deployment and ranks stored vectors with cosine
+similarity. The three closest chunks become temporary reference material for
+the response. The app keeps user/assistant turns itself and creates a fresh
+Agent Framework session for each request, so the temporary reference material
+is not carried into subsequent prompts.
+
+The Azure client keeps the prior runtime configuration: it reads
+AI:AzureOpenAI:APIKey and uses the existing endpoint and gpt-35-turbo chat
+deployment. The Agent Framework AIAgent is created from that Azure ChatClient
+with AsAIAgent and streams response updates to the console.
