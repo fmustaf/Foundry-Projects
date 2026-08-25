@@ -1,0 +1,2 @@
+- @azure Rule - Use Azure Tools - When handling requests related to Azure, use Azure tools when they are available.
+- @azure Rule - Use Azure Best Practices - Follow current Azure security, identity, and reliability best practices.

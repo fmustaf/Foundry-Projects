@@ -1,0 +1,46 @@
+﻿using Azure.AI.OpenAI;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+using OpenAI.Chat;
+using System;
+
+namespace QuickStart_Agent_Framework_Sample_One
+{
+    public  class Program
+    {
+        static async Task Main(string[] args)
+        {
+            Console.WriteLine("Getting Started with the Agent Framework ... ");
+
+    //        var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+    //?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
+    //        var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "gpt-4o-mini";
+
+            const string deploymentName = "gpt-4.1-mini";
+            // Use this endpoint when you are calling the model deployed in Azure OpenAI.
+            // const string endpoint = "https://demofaisalnewui-1423-resource.openai.azure.com/openai/v1/";
+            // Use this endpoint when you are calling the agent project deployed in Azure OpenAI. This is the endpoint for the project, not the model deployment.
+            const string endpoint = "https://demofaisalnewui-1423-resource.services.ai.azure.com/api/projects/demofaisalnewui-1423";
+
+            const string agentName = "AgentBond";
+
+            //AIAgent agent = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
+            //    .GetChatClient(deploymentName)
+            //    .AsAIAgent(instructions: "You are a friendly assistant. Keep your answers brief.", name: agentName);
+
+            AIAgent agent = new AzureOpenAIClient(new Uri(endpoint), new DefaultAzureCredential())
+                .GetChatClient(deploymentName)
+                .AsAIAgent(instructions: "You are a friendly assistant. Keep your answers brief.", name: agentName);
+
+            Console.WriteLine(await agent.RunAsync("What is the largest city in Pakistan?"));
+
+            await foreach (var update in agent.RunStreamingAsync("Tell me a one-sentence fun fact about Pakistan."))
+            {
+                Console.Write(update);
+            }
+        }
+    }
+}
+
+// This is the NuGet package for the Agent Framework: 
+dotnet add package Microsoft.Agents.AI
