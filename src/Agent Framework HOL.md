@@ -115,7 +115,7 @@ Do not set the API key yet. Microsoft Entra ID is the primary authentication met
 When you reach the fallback exercise, retrieve the key from its secure location and set it only in the current terminal:
 
 ```powershell
-$env:AZURE_OPENAI_API_KEY = "<your-key>"
+$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
 ```
 
 Closing the terminal clears these process-scoped variables.
@@ -418,9 +418,9 @@ var credential = new DefaultAzureCredential();
 with:
 
 ```csharp
-string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY")
+string apiKey = Environment.GetEnvironmentVariable("AZURE_API_KEY_AGENT_FRAMEWORK")
     ?? throw new InvalidOperationException(
-        "Set the AZURE_OPENAI_API_KEY environment variable.");
+        "Set the AZURE_API_KEY_AGENT_FRAMEWORK environment variable.");
 ```
 
 ## Step 3: Replace the Azure OpenAI client credential
@@ -442,14 +442,14 @@ The rest of the Agent Framework code does not change. The agent, session, non-st
 Retrieve the API key from the secure location selected in Exercise 1:
 
 ```powershell
-$env:AZURE_OPENAI_API_KEY = "<your-key>"
+$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
 dotnet run
 ```
 
 After the lab, clear the process-scoped value:
 
 ```powershell
-Remove-Item Env:AZURE_OPENAI_API_KEY
+Remove-Item Env:AZURE_API_KEY_AGENT_FRAMEWORK
 ```
 
 If a key was exposed in source control, terminal history, chat, or a screenshot, rotate it immediately in Azure.
@@ -603,7 +603,7 @@ To avoid unexpected Azure charges:
 
 1. Delete the model deployment if it was created only for this lab.
 2. Delete the Foundry project or resource group if instructed.
-3. Clear `AZURE_OPENAI_API_KEY` from the terminal.
+3. Clear `AZURE_API_KEY_AGENT_FRAMEWORK` from the terminal.
 4. Remove any temporary local copies of the API key.
 
 # References
