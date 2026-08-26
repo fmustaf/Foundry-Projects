@@ -4,7 +4,7 @@
 
 **Estimated time:** 60-75 minutes  
 **Language:** C#  
-**Framework:** .NET 8  
+**Framework:** .NET 10  
 **Model:** `gpt-4.1-mini`
 
 ## Why this training matters
@@ -59,8 +59,8 @@ AzureOpenAIClient
 
 - An Azure subscription in which you can create resources and model deployments.
 - Permission to create a Microsoft Foundry project.
-- .NET 8 SDK.
-- Visual Studio 2022, Visual Studio Code, or another C# editor.
+- .NET 8 OR .NET 10 SDK.
+- Visual Studio 2022 or 2026
 - Azure CLI or another supported local developer credential.
 - This starter solution:
   `QuickStart_Agent_Framework_Multi_Turn_Convo.sln`
