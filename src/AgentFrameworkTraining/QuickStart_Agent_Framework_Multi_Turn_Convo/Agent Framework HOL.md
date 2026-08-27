@@ -4,7 +4,7 @@
 
 **Estimated time:** 60-75 minutes  
 **Language:** C#  
-**Framework:** .NET 8  
+**Framework:** .NET 10  
 **Model:** `gpt-4.1-mini`
 
 ## Why this training matters
@@ -59,11 +59,9 @@ AzureOpenAIClient
 
 - An Azure subscription in which you can create resources and model deployments.
 - Permission to create a Microsoft Foundry project.
-- .NET 8 SDK.
-- Visual Studio 2022, Visual Studio Code, or another C# editor.
+- .NET 8 OR .NET 10 SDK.
+- Visual Studio 2022 or 2026
 - Azure CLI or another supported local developer credential.
-- This starter solution:
-  `QuickStart_Agent_Framework_Multi_Turn_Convo.sln`
 
 > [!IMPORTANT]
 > Azure portal labels can change. If a label in this lab differs slightly from the portal, use the equivalent **Microsoft Foundry**, **Models + endpoints**, **Deployments**, or **Keys and Endpoint** page.
@@ -145,15 +143,18 @@ Closing the terminal clears these process-scoped variables.
 
 # Exercise 2: Prepare the .NET project
 
-## Step 1: Open the starter solution
+## Step 1: Create the starter solution in Visual Studio
 
-Open:
+Create a Console Application in Visual Studio, set the Project Name to 'QuickStart_Agent_Framework_Multi_Turn_Convo'. Visual Studio will create the following solution:
 
 ```text
 QuickStart_Agent_Framework_Multi_Turn_Convo.sln
 ```
 
-The project targets .NET 8 and has nullable reference types enabled.
+The project targets .NET 10 and has nullable reference types enabled. 
+
+> [!NOTE]
+> If you do not have .NET 10 installed, you may target .NET 8, the code will work with .NET 8.
 
 ## Step 2: Install the NuGet packages
 
