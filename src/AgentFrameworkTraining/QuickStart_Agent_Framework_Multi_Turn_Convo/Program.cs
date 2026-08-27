@@ -70,7 +70,7 @@ namespace QuickStart_Agent_Framework_Multi_Turn_Convo
 
                 // Invoke the agent and output the text result.
                 Console.WriteLine(await agent.RunAsync("Tell me a joke about a pirate.", session));
-                Console.WriteLine(await agent.RunAsync("Now add some emojis to the joke and tell it in the voice of a pirate's parrot.", session));
+                //Console.WriteLine(await agent.RunAsync("Now add some emojis to the joke and tell it in the voice of a pirate's parrot.", session));
 
                 // Invoke the agent with streaming support.
                 await foreach (var update in agent.RunStreamingAsync("Tell me a joke about a pirate.", session))
