@@ -78,7 +78,7 @@ AzureOpenAIClient
 4. Open the resource in the [Microsoft Foundry portal](https://ai.azure.com).
 5. Select **Create project**.
 6. Enter a unique project name.
-7. Select the Azure subscription, resource group, and supported region provided by your instructor.
+7. Select the Azure subscription, resource group, and supported region.
 8. Create the project and wait for provisioning to finish.
 
 ## Step 2: Deploy `gpt-4.1-mini`
@@ -99,6 +99,16 @@ AzureOpenAIClient
 > [!NOTE]
 > The deployment name is supplied to `GetChatClient`. A deployment name is not necessarily the same as the model's catalog name. This lab deliberately uses `gpt-4.1-mini` for both.
 
+Your identity must be authorized to invoke the model. An administrator can assign the **Cognitive Services OpenAI User** role on the Azure OpenAI resource:
+
+1. Open the Azure OpenAI resource in the Azure portal.
+2. Select **Access control (IAM)**.
+3. Select **Add role assignment**.
+4. Select **Cognitive Services OpenAI User**.
+5. Assign the role to the student identity.
+
+Role assignments can take several minutes to propagate.
+
 ## Step 3: Record the endpoints and API key securely
 
 On the project overview page, record the **project endpoint** for future Foundry project exercises. It commonly resembles:
@@ -115,7 +125,7 @@ https://<resource-name>.openai.azure.com/
 
 The code in this lab creates an `AzureOpenAIClient`, so it uses the **Azure OpenAI resource endpoint**, not the Foundry project endpoint.
 
-Open **Keys and Endpoint** and copy one API key only if your instructor requires the fallback authentication exercise.
+Open **Keys and Endpoint** and copy one API key only if Entra ID auth fails then this is a fallback for authentication.
 
 > [!CAUTION]
 > Do not paste keys into `Program.cs`, source control, chat, screenshots, or lab notes. Store the key in an approved password manager, Azure Key Vault, or another encrypted file location outside the repository. The application reads secrets from environment variables.
@@ -276,28 +286,7 @@ const string agentName = "AgentBond";
 
 This keeps environment-specific configuration out of source code.
 
-## Step 3: Sign in for local development
-
-In PowerShell, run:
-
-```powershell
-az login
-az account show
-```
-
-Confirm that the active subscription contains the Foundry resource.
-
-Your identity must be authorized to invoke the model. An administrator can assign the **Cognitive Services OpenAI User** role on the Azure OpenAI resource:
-
-1. Open the Azure OpenAI resource in the Azure portal.
-2. Select **Access control (IAM)**.
-3. Select **Add role assignment**.
-4. Select **Cognitive Services OpenAI User**.
-5. Assign the role to the student identity.
-
-Role assignments can take several minutes to propagate.
-
-## Step 4: Create the Azure credential
+## Step 3: Create the Azure credential
 
 Add:
 
@@ -310,7 +299,7 @@ var credential = new DefaultAzureCredential();
 > [!IMPORTANT]
 > The credential proves who the caller is. Azure role-based access control determines whether that identity can invoke the model.
 
-## Step 5: Create and adapt the chat client
+## Step 4: Create and adapt the chat client
 
 Add:
 
@@ -455,7 +444,7 @@ Observe that text is displayed incrementally. The same multi-turn behavior is re
 
 ---
 
-# Exercise 6: Use an API key only when Entra ID authentication is blocked
+# Exercise 6 (Optional): Use an API key only when Entra ID authentication is blocked
 
 Microsoft Entra ID with Azure role-based access control is the preferred approach.
 
@@ -593,7 +582,7 @@ internal class Program
 3. Confirm the signed-in identity has **Cognitive Services OpenAI User** on the correct resource.
 4. Wait for a new role assignment to propagate.
 5. Confirm the Azure OpenAI resource allows the network path used by the lab computer.
-6. If the instructor cannot configure identity access, complete the explicit API key fallback exercise.
+6. If configuring identity access is unsuccessful, complete the explicit API key fallback exercise.
 
 ## HTTP 401: Unauthorized
 
