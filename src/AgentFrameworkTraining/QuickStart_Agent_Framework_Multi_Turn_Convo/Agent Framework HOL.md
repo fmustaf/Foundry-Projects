@@ -122,22 +122,42 @@ Open **Keys and Endpoint** and copy one API key only if your instructor requires
 
 ## Step 4: Configure environment variables
 
-Open PowerShell and set the non-secret configuration for your current terminal:
+Add the configuration as Windows user environment variables so it is available to Visual Studio and new terminal sessions:
 
-```powershell
-$env:AZURE_OPENAI_ENDPOINT = "https://<resource-name>.openai.azure.com/"
-$env:AZURE_OPENAI_DEPLOYMENT_NAME = "gpt-4.1-mini"
-```
+1. Press the **Windows key** and search for **Edit environment variables for your account**.
+2. Open the matching System Settings result.
+3. In the **User variables** section, select **New**.
+4. Create the following variable:
 
-Do not set the API key yet. Microsoft Entra ID is the primary authentication method in this lab.
+   | Field | Value |
+   | --- | --- |
+   | Variable name | `AZURE_OPENAI_ENDPOINT` |
+   | Variable value | `https://<resource-name>.openai.azure.com/` |
 
-When you reach the fallback exercise, retrieve the key from its secure location and set it only in the current terminal:
+5. Select **New** again and create the following variable:
 
-```powershell
-$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
-```
+   | Field | Value |
+   | --- | --- |
+   | Variable name | `AZURE_OPENAI_DEPLOYMENT_NAME` |
+   | Variable value | `gpt-4.1-mini` |
 
-Closing the terminal clears these process-scoped variables.
+6. Select **OK** to close each dialog and save the variables.
+7. Close and reopen Visual Studio and any terminal windows so the applications load the new values.
+
+Use **User variables**, not **System variables**. User variables do not require administrator access and are available only to your Windows account.
+
+Do not create the API key variable yet. Microsoft Entra ID is the primary authentication method in this lab. If you reach the fallback exercise, return to **Edit environment variables for your account** and create:
+
+| Field | Value |
+| --- | --- |
+| Variable name | `AZURE_API_KEY_AGENT_FRAMEWORK` |
+| Variable value | The API key retrieved from its secure location |
+
+> [!CAUTION]
+> Windows environment variables are persistent but are not an encrypted secret store. Create the API key variable only when the fallback exercise requires it, do not use a system-wide variable, and remove it after the lab.
+
+> [!NOTE]
+> You need to restart Visual Studio after adding the environment variables, in case you already have Visual Studio Open.
 
 ---
 
@@ -145,7 +165,27 @@ Closing the terminal clears these process-scoped variables.
 
 ## Step 1: Create the starter solution in Visual Studio
 
-Create a Console Application in Visual Studio, set the Project Name to 'QuickStart_Agent_Framework_Multi_Turn_Convo'. Visual Studio will create the following solution:
+Sign in to your Azure subscription via Azure CLI. Follow the prompts to complete the login to your Azure subscription.
+
+```text
+az login --use-device-code
+```
+If you have access to more than one subscription, once logged in verify you are using the right subscription:
+```text
+az account show
+```
+If you are not in the intended subscription:
+```text
+az account set --subscription yoursubscriptionid
+```
+
+> [!NOTE]
+> We are doing this upfront so we can use the DefaultAzureCredential method to authenticate instead of using the API Key. 
+using API Key is not a best practice. If the DefaultAzureCredential fails for you, then revert to using the API Key so you may proceed with the lab.
+
+Sign in in Visual Studio to your Azure Tenant. Click Top Right hand corner for your profile in Visual Studio, Add an account, Work or School Account, use your Azure Subscription Credentials to add the account.
+
+Now, create a Console Application in Visual Studio, set the Project Name to 'QuickStart_Agent_Framework_Multi_Turn_Convo'. Visual Studio will create the following solution:
 
 ```text
 QuickStart_Agent_Framework_Multi_Turn_Convo.sln
@@ -417,19 +457,9 @@ Observe that text is displayed incrementally. The same multi-turn behavior is re
 
 # Exercise 6: Use an API key only when Entra ID authentication is blocked
 
-Microsoft Entra ID with Azure role-based access control is the preferred approach. Complete this exercise only if directed by the instructor or if the lab identity cannot be granted the required role.
+Microsoft Entra ID with Azure role-based access control is the preferred approach.
 
-Do not silently catch an authentication failure and downgrade to key authentication. Select the authentication method explicitly so configuration and permission errors remain visible.
-
-## Step 1: Add the API key namespace
-
-At the top of `Program.cs`, add:
-
-```csharp
-using Azure;
-```
-
-## Step 2: Load the key from the environment
+## Step 1: Load the key from the environment
 
 Replace:
 
@@ -445,7 +475,7 @@ string apiKey = Environment.GetEnvironmentVariable("AZURE_API_KEY_AGENT_FRAMEWOR
         "Set the AZURE_API_KEY_AGENT_FRAMEWORK environment variable.");
 ```
 
-## Step 3: Replace the Azure OpenAI client credential
+## Step 2: Replace the Azure OpenAI client credential
 
 Replace the `IChatClient` construction with:
 
@@ -459,7 +489,7 @@ IChatClient chatClient = new AzureOpenAIClient(
 
 The rest of the Agent Framework code does not change. The agent, session, non-streaming calls, and streaming calls are independent of the selected Azure OpenAI authentication method.
 
-## Step 4: Set the key and run
+## Step 3: Set the key and run
 
 Retrieve the API key from the secure location selected in Exercise 1:
 
