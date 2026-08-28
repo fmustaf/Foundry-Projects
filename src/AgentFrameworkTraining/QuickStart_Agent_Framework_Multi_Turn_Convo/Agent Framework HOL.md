@@ -130,6 +130,7 @@ Open **Keys and Endpoint** and copy one API key only if Entra ID auth fails then
 > [!CAUTION]
 > Do not paste keys into `Program.cs`, source control, chat, screenshots, or lab notes. Store the key in an approved password manager, Azure Key Vault, or another encrypted file location outside the repository. The application reads secrets from environment variables.
 
+Now, create the Agent in the portal, Name: **AgentBond**. Under Agents, click on New agent->Build an agent. Accept all defaults, and the agent should point to the deployed model above, **gpt-4.1-mini**.
 ## Step 4: Configure environment variables
 
 Add the configuration as Windows user environment variables so it is available to Visual Studio and new terminal sessions:
