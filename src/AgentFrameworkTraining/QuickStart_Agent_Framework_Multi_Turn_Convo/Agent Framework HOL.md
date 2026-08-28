@@ -379,7 +379,11 @@ The second prompt says "the joke" rather than repeating the first prompt. It wor
 ## Step 5: Run the application
 
 ```powershell
-dotnet run
+dotnet run 
+```
+OR
+```text
+ctrl + F5 in Visual Studio IDE
 ```
 
 Check that:
@@ -437,7 +441,11 @@ Console.WriteLine();
 ## Step 4: Run the application again
 
 ```powershell
-dotnet run
+dotnet run 
+```
+OR
+```text
+ctrl + F5 in Visual Studio IDE
 ```
 
 Observe that text is displayed incrementally. The same multi-turn behavior is retained because both streaming calls use `streamingSession`.
@@ -477,23 +485,6 @@ IChatClient chatClient = new AzureOpenAIClient(
 ```
 
 The rest of the Agent Framework code does not change. The agent, session, non-streaming calls, and streaming calls are independent of the selected Azure OpenAI authentication method.
-
-## Step 3: Set the key and run
-
-Retrieve the API key from the secure location selected in Exercise 1:
-
-```powershell
-$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
-dotnet run
-```
-
-After the lab, clear the process-scoped value:
-
-```powershell
-Remove-Item Env:AZURE_API_KEY_AGENT_FRAMEWORK
-```
-
-If a key was exposed in source control, terminal history, chat, or a screenshot, rotate it immediately in Azure.
 
 ---
 
