@@ -51,7 +51,7 @@ namespace QuickStart_Agent_Framework_Multi_Turn_Convo
                 var token = await credential.GetTokenAsync(
                     new Azure.Core.TokenRequestContext(new[] { "https://cognitiveservices.azure.com/.default" }),
                     default);
-                Console.WriteLine($"Token acquired successfully. Expires: {token.ExpiresOn}");             
+                Console.WriteLine($"Token acquired successfully. Expires: {token.ExpiresOn}");
 
                 // ✅ Step 1: create chat client
                 var chatClient = new AzureOpenAIClient(

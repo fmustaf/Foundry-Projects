@@ -122,22 +122,39 @@ Open **Keys and Endpoint** and copy one API key only if your instructor requires
 
 ## Step 4: Configure environment variables
 
-Open PowerShell and set the non-secret configuration for your current terminal:
+Add the configuration as Windows user environment variables so it is available to Visual Studio and new terminal sessions:
 
-```powershell
-$env:AZURE_OPENAI_ENDPOINT = "https://<resource-name>.openai.azure.com/"
-$env:AZURE_OPENAI_DEPLOYMENT_NAME = "gpt-4.1-mini"
-```
+1. Press the **Windows key** and search for **Edit environment variables for your account**.
+2. Open the matching System Settings result.
+3. In the **User variables** section, select **New**.
+4. Create the following variable:
 
-Do not set the API key yet. Microsoft Entra ID is the primary authentication method in this lab.
+   | Field | Value |
+   | --- | --- |
+   | Variable name | `AZURE_OPENAI_ENDPOINT` |
+   | Variable value | `https://<resource-name>.openai.azure.com/` |
 
-When you reach the fallback exercise, retrieve the key from its secure location and set it only in the current terminal:
+5. Select **New** again and create the following variable:
 
-```powershell
-$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
-```
+   | Field | Value |
+   | --- | --- |
+   | Variable name | `AZURE_OPENAI_DEPLOYMENT_NAME` |
+   | Variable value | `gpt-4.1-mini` |
 
-Closing the terminal clears these process-scoped variables.
+6. Select **OK** to close each dialog and save the variables.
+7. Close and reopen Visual Studio and any terminal windows so the applications load the new values.
+
+Use **User variables**, not **System variables**. User variables do not require administrator access and are available only to your Windows account.
+
+Do not create the API key variable yet. Microsoft Entra ID is the primary authentication method in this lab. If you reach the fallback exercise, return to **Edit environment variables for your account** and create:
+
+| Field | Value |
+| --- | --- |
+| Variable name | `AZURE_API_KEY_AGENT_FRAMEWORK` |
+| Variable value | The API key retrieved from its secure location |
+
+> [!CAUTION]
+> Windows environment variables are persistent but are not an encrypted secret store. Create the API key variable only when the fallback exercise requires it, do not use a system-wide variable, and remove it after the lab.
 
 ---
 
@@ -461,18 +478,13 @@ The rest of the Agent Framework code does not change. The agent, session, non-st
 
 ## Step 4: Set the key and run
 
-Retrieve the API key from the secure location selected in Exercise 1:
+Retrieve the API key from the secure location selected in Exercise 1. Using **Edit environment variables for your account**, create the `AZURE_API_KEY_AGENT_FRAMEWORK` user variable as described in Exercise 1. Close and reopen Visual Studio or the terminal before running:
 
 ```powershell
-$env:AZURE_API_KEY_AGENT_FRAMEWORK = "<your-key>"
 dotnet run
 ```
 
-After the lab, clear the process-scoped value:
-
-```powershell
-Remove-Item Env:AZURE_API_KEY_AGENT_FRAMEWORK
-```
+After the lab, reopen **Edit environment variables for your account**, select `AZURE_API_KEY_AGENT_FRAMEWORK` under **User variables**, and select **Delete**.
 
 If a key was exposed in source control, terminal history, chat, or a screenshot, rotate it immediately in Azure.
 
@@ -625,7 +637,7 @@ To avoid unexpected Azure charges:
 
 1. Delete the model deployment if it was created only for this lab.
 2. Delete the Foundry project or resource group if instructed.
-3. Clear `AZURE_API_KEY_AGENT_FRAMEWORK` from the terminal.
+3. Delete `AZURE_API_KEY_AGENT_FRAMEWORK` from Windows **User variables**.
 4. Remove any temporary local copies of the API key.
 
 # References
