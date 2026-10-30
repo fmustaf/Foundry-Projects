@@ -78,7 +78,7 @@ AzureOpenAIClient
 4. Open the resource in the [Microsoft Foundry portal](https://ai.azure.com).
 5. Select **Create project**.
 6. Enter a unique project name.
-7. Select the Azure subscription, resource group, and supported region provided by your instructor.
+7. Select the Azure subscription, resource group, and supported region.
 8. Create the project and wait for provisioning to finish.
 
 ## Step 2: Deploy `gpt-4.1-mini`
@@ -99,6 +99,16 @@ AzureOpenAIClient
 > [!NOTE]
 > The deployment name is supplied to `GetChatClient`. A deployment name is not necessarily the same as the model's catalog name. This lab deliberately uses `gpt-4.1-mini` for both.
 
+Your identity must be authorized to invoke the model. An administrator can assign the **Cognitive Services OpenAI User** role on the Azure OpenAI resource:
+
+1. Open the Azure OpenAI resource in the Azure portal.
+2. Select **Access control (IAM)**.
+3. Select **Add role assignment**.
+4. Select **Cognitive Services OpenAI User**.
+5. Assign the role to the student identity.
+
+Role assignments can take several minutes to propagate.
+
 ## Step 3: Record the endpoints and API key securely
 
 On the project overview page, record the **project endpoint** for future Foundry project exercises. It commonly resembles:
@@ -115,11 +125,12 @@ https://<resource-name>.openai.azure.com/
 
 The code in this lab creates an `AzureOpenAIClient`, so it uses the **Azure OpenAI resource endpoint**, not the Foundry project endpoint.
 
-Open **Keys and Endpoint** and copy one API key only if your instructor requires the fallback authentication exercise.
+Open **Keys and Endpoint** and copy one API key only if Entra ID auth fails then this is a fallback for authentication.
 
 > [!CAUTION]
 > Do not paste keys into `Program.cs`, source control, chat, screenshots, or lab notes. Store the key in an approved password manager, Azure Key Vault, or another encrypted file location outside the repository. The application reads secrets from environment variables.
 
+Now, create the Agent in the portal, Name: **AgentBond**. Under Agents, click on New agent->Build an agent. Accept all defaults, and the agent should point to the deployed model above, **gpt-4.1-mini**.
 ## Step 4: Configure environment variables
 
 Add the configuration as Windows user environment variables so it is available to Visual Studio and new terminal sessions:
@@ -155,6 +166,12 @@ Do not create the API key variable yet. Microsoft Entra ID is the primary authen
 
 > [!CAUTION]
 > Windows environment variables are persistent but are not an encrypted secret store. Create the API key variable only when the fallback exercise requires it, do not use a system-wide variable, and remove it after the lab.
+<<<<<<< HEAD
+=======
+
+> [!NOTE]
+> You need to restart Visual Studio after adding the environment variables, in case you already have Visual Studio Open.
+>>>>>>> f89a67e1f0949d39c1c023e8553fffe051ac08b1
 
 ---
 
@@ -162,7 +179,27 @@ Do not create the API key variable yet. Microsoft Entra ID is the primary authen
 
 ## Step 1: Create the starter solution in Visual Studio
 
-Create a Console Application in Visual Studio, set the Project Name to 'QuickStart_Agent_Framework_Multi_Turn_Convo'. Visual Studio will create the following solution:
+Sign in to your Azure subscription via Azure CLI. Follow the prompts to complete the login to your Azure subscription.
+
+```text
+az login --use-device-code
+```
+If you have access to more than one subscription, once logged in verify you are using the right subscription:
+```text
+az account show
+```
+If you are not in the intended subscription:
+```text
+az account set --subscription yoursubscriptionid
+```
+
+> [!NOTE]
+> We are doing this upfront so we can use the DefaultAzureCredential method to authenticate instead of using the API Key. 
+using API Key is not a best practice. If the DefaultAzureCredential fails for you, then revert to using the API Key so you may proceed with the lab.
+
+Sign in in Visual Studio to your Azure Tenant. Click Top Right hand corner for your profile in Visual Studio, Add an account, Work or School Account, use your Azure Subscription Credentials to add the account.
+
+Now, create a Console Application in Visual Studio, set the Project Name to 'QuickStart_Agent_Framework_Multi_Turn_Convo'. Visual Studio will create the following solution:
 
 ```text
 QuickStart_Agent_Framework_Multi_Turn_Convo.sln
@@ -253,28 +290,7 @@ const string agentName = "AgentBond";
 
 This keeps environment-specific configuration out of source code.
 
-## Step 3: Sign in for local development
-
-In PowerShell, run:
-
-```powershell
-az login
-az account show
-```
-
-Confirm that the active subscription contains the Foundry resource.
-
-Your identity must be authorized to invoke the model. An administrator can assign the **Cognitive Services OpenAI User** role on the Azure OpenAI resource:
-
-1. Open the Azure OpenAI resource in the Azure portal.
-2. Select **Access control (IAM)**.
-3. Select **Add role assignment**.
-4. Select **Cognitive Services OpenAI User**.
-5. Assign the role to the student identity.
-
-Role assignments can take several minutes to propagate.
-
-## Step 4: Create the Azure credential
+## Step 3: Create the Azure credential
 
 Add:
 
@@ -287,7 +303,7 @@ var credential = new DefaultAzureCredential();
 > [!IMPORTANT]
 > The credential proves who the caller is. Azure role-based access control determines whether that identity can invoke the model.
 
-## Step 5: Create and adapt the chat client
+## Step 4: Create and adapt the chat client
 
 Add:
 
@@ -367,7 +383,11 @@ The second prompt says "the joke" rather than repeating the first prompt. It wor
 ## Step 5: Run the application
 
 ```powershell
-dotnet run
+dotnet run 
+```
+OR
+```text
+ctrl + F5 in Visual Studio IDE
 ```
 
 Check that:
@@ -425,28 +445,22 @@ Console.WriteLine();
 ## Step 4: Run the application again
 
 ```powershell
-dotnet run
+dotnet run 
+```
+OR
+```text
+ctrl + F5 in Visual Studio IDE
 ```
 
 Observe that text is displayed incrementally. The same multi-turn behavior is retained because both streaming calls use `streamingSession`.
 
 ---
 
-# Exercise 6: Use an API key only when Entra ID authentication is blocked
+# Exercise 6 (Optional): Use an API key only when Entra ID authentication is blocked
 
-Microsoft Entra ID with Azure role-based access control is the preferred approach. Complete this exercise only if directed by the instructor or if the lab identity cannot be granted the required role.
+Microsoft Entra ID with Azure role-based access control is the preferred approach.
 
-Do not silently catch an authentication failure and downgrade to key authentication. Select the authentication method explicitly so configuration and permission errors remain visible.
-
-## Step 1: Add the API key namespace
-
-At the top of `Program.cs`, add:
-
-```csharp
-using Azure;
-```
-
-## Step 2: Load the key from the environment
+## Step 1: Load the key from the environment
 
 Replace:
 
@@ -462,7 +476,7 @@ string apiKey = Environment.GetEnvironmentVariable("AZURE_API_KEY_AGENT_FRAMEWOR
         "Set the AZURE_API_KEY_AGENT_FRAMEWORK environment variable.");
 ```
 
-## Step 3: Replace the Azure OpenAI client credential
+## Step 2: Replace the Azure OpenAI client credential
 
 Replace the `IChatClient` construction with:
 
@@ -476,6 +490,7 @@ IChatClient chatClient = new AzureOpenAIClient(
 
 The rest of the Agent Framework code does not change. The agent, session, non-streaming calls, and streaming calls are independent of the selected Azure OpenAI authentication method.
 
+<<<<<<< HEAD
 ## Step 4: Set the key and run
 
 Retrieve the API key from the secure location selected in Exercise 1. Using **Edit environment variables for your account**, create the `AZURE_API_KEY_AGENT_FRAMEWORK` user variable as described in Exercise 1. Close and reopen Visual Studio or the terminal before running:
@@ -488,6 +503,8 @@ After the lab, reopen **Edit environment variables for your account**, select `A
 
 If a key was exposed in source control, terminal history, chat, or a screenshot, rotate it immediately in Azure.
 
+=======
+>>>>>>> f89a67e1f0949d39c1c023e8553fffe051ac08b1
 ---
 
 # Completed `Program.cs` using Microsoft Entra ID
@@ -575,7 +592,7 @@ internal class Program
 3. Confirm the signed-in identity has **Cognitive Services OpenAI User** on the correct resource.
 4. Wait for a new role assignment to propagate.
 5. Confirm the Azure OpenAI resource allows the network path used by the lab computer.
-6. If the instructor cannot configure identity access, complete the explicit API key fallback exercise.
+6. If configuring identity access is unsuccessful, complete the explicit API key fallback exercise.
 
 ## HTTP 401: Unauthorized
 
