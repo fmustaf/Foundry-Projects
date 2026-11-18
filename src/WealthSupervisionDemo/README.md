@@ -1,4 +1,4 @@
-# Zero-Trust Agentic Supervision for Wealth Management Communications
+# Agentic Supervision for Wealth Management Communications
 **Microsoft Foundry • .NET Agent Framework • Blazor Server Command Center**
 
 > **Core Compliance Invariant:** **Zero Agent Approval Authority** — AI agents classify, score regulatory risk, enforce Data Loss Prevention (DLP), route drafts, and compile immutable records, while **Registered Principals retain 100% of approval authority** in accordance with FINRA Rules 2210 and 3110, FINRA Regulatory Notice 24-09, and SEC Rule 17a-4.
