@@ -1,0 +1,425 @@
+@page "/"
+@rendermode InteractiveServer
+@using WealthSupervisionDemo.Models
+@using WealthSupervisionDemo.Services
+@inject SupervisionOrchestratorService Orchestrator
+
+<PageTitle>Agentic Supervision Command Center — FINRA / SEC 17a-4</PageTitle>
+
+<div class="container-fluid py-3 px-4 bg-light min-vh-100">
+    <div class="d-flex flex-wrap justify-content-between align-items-center bg-dark text-white p-3 rounded-3 shadow-sm mb-4">
+        <div>
+            <h4 class="mb-0 fw-bold">Wealth Management AI Supervision Command Center</h4>
+            <small class="text-info">Microsoft Foundry &bull; .NET Agent Framework &bull; Zero Agent Approval Authority</small>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="form-check form-switch bg-secondary bg-opacity-25 px-3 py-2 rounded">
+                <input class="form-check-input" type="checkbox" id="wspToggle"
+                       @bind="Orchestrator.RequirePreSendPrincipalApprovalForAll" />
+                <label class="form-check-label small fw-semibold" for="wspToggle">
+                    @(Orchestrator.RequirePreSendPrincipalApprovalForAll
+                        ? "Strict WSP: 100% Pre-Send Principal Approval"
+                        : "Standard FINRA 2210/3110: Retail/Flagged Pre-Approved")
+                </label>
+            </div>
+
+            <div class="form-check form-switch bg-secondary bg-opacity-25 px-3 py-2 rounded">
+                <input class="form-check-input" type="checkbox" id="modeToggle"
+                       checked="@(!Orchestrator.IsMockMode)"
+                       @onchange="@(e => Orchestrator.IsMockMode = !(bool)(e.Value ?? false))" />
+                <label class="form-check-label fw-semibold" for="modeToggle">
+                    @if (Orchestrator.IsMockMode)
+                    {
+                        <span class="badge bg-warning text-dark">OFFLINE DEMO MODE (Wi-Fi Safe)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">LIVE MICROSOFT FOUNDRY</span>
+                    }
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">Supervision Coverage</div>
+                    <div class="fs-3 fw-bold text-primary">100% <span class="fs-6 text-success">(up from 3%)</span></div>
+                    <div class="small text-muted">@Orchestrator.TotalMessagesProcessed.ToString("N0") communications inspected</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">False-Positive Reduction</div>
+                    <div class="fs-3 fw-bold text-success">-72% <span class="fs-6 text-muted">(Target: -70%)</span></div>
+                    <div class="small text-muted">~$12M/yr principal capacity reclaimed</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">Principal HITL Queue</div>
+                    <div class="fs-3 fw-bold text-warning">@Orchestrator.PrincipalQueue.Count(x => x.DecisionState == "PENDING_PRINCIPAL") Pending</div>
+                    <div class="small text-muted">0 unapproved retail messages leaked</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">SEC 17a-4 WORM Vault</div>
+                    <div class="fs-3 fw-bold text-dark">@Orchestrator.WormAuditVault.Count Records</div>
+                    <div class="small text-muted">Blended cost: $0.0041 / message</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav nav-pills mb-3 gap-2">
+        <li class="nav-item">
+            <button class="nav-link @(activeTab == "advisor" ? "active" : "bg-white text-dark border")"
+                    @onclick='() => activeTab = "advisor"'>
+                1. Advisor &amp; Copilot Studio Simulator
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link @(activeTab == "principal" ? "active" : "bg-white text-dark border")"
+                    @onclick='() => activeTab = "principal"'>
+                2. Principal Teams Queue (HITL)
+                <span class="badge bg-danger ms-1">@Orchestrator.PrincipalQueue.Count(x => x.DecisionState == "PENDING_PRINCIPAL")</span>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link @(activeTab == "audit" ? "active" : "bg-white text-dark border")"
+                    @onclick='() => activeTab = "audit"'>
+                3. SEC 17a-4 Examiner Audit Vault (@Orchestrator.WormAuditVault.Count)
+            </button>
+        </li>
+    </ul>
+
+    @if (activeTab == "advisor")
+    {
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white fw-bold">
+                        M365 Copilot / Copilot Studio Ingress Surface
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">One-Click Panel Demo Scenarios:</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-sm btn-outline-danger" @onclick="LoadExecutiveHookPreset">
+                                    1. Executive Hook (Promissory + WhatsApp)
+                                </button>
+                                <button class="btn btn-sm btn-outline-success" @onclick="LoadFalsePositivePreset">
+                                    2. Benign "Guarantee" (FINRA 3110 Log)
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning text-dark" @onclick="LoadFailClosedPreset">
+                                    3. Low Confidence (&lt;85% Fail-Closed)
+                                </button>
+                                <button class="btn btn-sm btn-outline-dark" @onclick="LoadDlpBlockPreset">
+                                    4. DLP Leak (Account # Block)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label small fw-semibold">Channel</label>
+                            <select class="form-select form-select-sm" @bind="currentEvent.Channel">
+                                <option value="Outlook + Copilot">Outlook + M365 Copilot</option>
+                                <option value="Teams + Copilot">Microsoft Teams + Copilot</option>
+                                <option value="Copilot Studio Agent">Copilot Studio Client Agent (Entra Agent ID)</option>
+                            </select>
+                        </div>
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Retail Recipients</label>
+                                <input type="number" class="form-control form-control-sm" @bind="currentEvent.RetailRecipientCount" />
+                            </div>
+                            <div class="col-6 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="aiFlag" @bind="currentEvent.HasCopilotProvenance" />
+                                    <label class="form-check-label small" for="aiFlag">AI-Drafted (Copilot Tag)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label small fw-semibold">Advisor Prompt (Captured for 17a-4)</label>
+                            <input type="text" class="form-control form-control-sm" @bind="currentEvent.UserPrompt" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Draft Communication Body</label>
+                            <textarea class="form-control form-control-sm" rows="4" @bind="currentEvent.DraftContent"></textarea>
+                        </div>
+
+                        <button class="btn btn-primary w-100 fw-semibold" disabled="@isProcessing" @onclick="RunSupervisionAsync">
+                            @(isProcessing ? "Running 6-Agent Supervision Graph..." : "Send / Submit to Supervision Pipeline")
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Live 6-Agent Orchestration &amp; Governance Trace (Slide 8 Flow)</span>
+                        @if (lastResult != null)
+                        {
+                            <span class="badge bg-secondary">Latency: @lastResult.TotalLatencyMs ms | Cost: $@lastResult.EstimatedInferenceCostUsd</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        @if (lastResult == null)
+                        {
+                            <div class="text-center text-muted py-5">
+                                Select a demo scenario on the left and click <strong>Send / Submit</strong> to inspect the 6-agent workflow.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert @(lastResult.FinalDisposition == "LOGGED_FOR_PRINCIPAL_SURVEILLANCE" ? "alert-info" : lastResult.FinalDisposition == "HELD_FOR_PRINCIPAL_APPROVAL" ? "alert-warning" : "alert-danger") d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Disposition: @lastResult.FinalDisposition</strong>
+                                    <div class="small">
+                                        FINRA 2210: <strong>@lastResult.RuleClassification</strong> |
+                                        <strong>Zero Agent Approval Authority</strong> |
+                                        Trace: <code>@lastResult.TraceId</code>
+                                    </div>
+                                </div>
+                                @if (lastResult.FinalDisposition == "HELD_FOR_PRINCIPAL_APPROVAL")
+                                {
+                                    <button class="btn btn-sm btn-dark" @onclick='() => activeTab = "principal"'>
+                                        Open in Principal Queue &rarr;
+                                    </button>
+                                }
+                            </div>
+
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (var step in lastResult.AgentSteps)
+                                {
+                                    <div class="border rounded p-2 bg-white">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="fw-bold">@step.AgentName</span>
+                                                <span class="badge bg-light text-dark border ms-1">@step.RoleAndAutonomy</span>
+                                                <span class="badge bg-info text-dark ms-1">@step.ModelUsed</span>
+                                            </div>
+                                            <div>
+                                                <span class="small text-muted me-2">Conf: @step.ConfidenceScore.ToString("P0") | @step.LatencyMs ms</span>
+                                                <span class="badge @(step.StatusBadge == "PASS" || step.StatusBadge == "ARCHIVED" ? "bg-success" : step.StatusBadge == "FLAGGED" ? "bg-warning text-dark" : "bg-danger")">
+                                                    @step.StatusBadge
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="small mt-1 text-dark">@step.Rationale</div>
+                                        <div class="mt-1">
+                                            @foreach (var cite in step.RegulatoryCitations)
+                                            {
+                                                <span class="badge bg-secondary bg-opacity-10 text-secondary border me-1">@cite</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (activeTab == "principal")
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-bold">
+                Microsoft Teams — Registered Principal Pre-Approval Queue (100% Principal Approval Authority)
+            </div>
+            <div class="card-body">
+                @if (!Orchestrator.PrincipalQueue.Any())
+                {
+                    <p class="text-muted">No items currently held for principal review. Trigger Scenario 1 or 3 in Tab 1 to test HITL routing.</p>
+                }
+                else
+                {
+                    @foreach (var item in Orchestrator.PrincipalQueue)
+                    {
+                        <div class="border rounded p-3 mb-3 @(item.DecisionState == "PENDING_PRINCIPAL" ? "border-warning bg-warning bg-opacity-10" : "bg-white")">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="badge bg-dark me-2">@item.MessageId</span>
+                                    <strong>@item.OriginalEvent.AdvisorName</strong> via <em>@item.OriginalEvent.Channel</em>
+                                    <span class="badge bg-primary ms-2">FINRA 2210: @item.RuleCategory</span>
+                                </div>
+                                <span class="badge @(item.DecisionState == "PENDING_PRINCIPAL" ? "bg-warning text-dark" : item.DecisionState.Contains("APPROVED") ? "bg-success" : "bg-danger")">
+                                    @item.DecisionState
+                                </span>
+                            </div>
+
+                            <div class="p-2 bg-white border rounded mb-2 small" style="white-space: pre-line;">
+                                <strong>Agent 5 (Pre-Approval Router) Teams Adaptive Card Brief:</strong><br />
+                                @item.ExecutiveSummaryCard
+                            </div>
+
+                            @if (item.DecisionState == "PENDING_PRINCIPAL")
+                            {
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">Draft Text (Registered Principal may Edit directly before Approving):</label>
+                                    <textarea class="form-control form-control-sm" rows="2" @bind="item.EditedDraftContent"></textarea>
+                                </div>
+
+                                <div class="d-flex gap-2 align-items-center">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Principal rationale for SEC 17a-4 audit log..."
+                                           @bind="principalNoteInput" />
+                                    <button class="btn btn-sm btn-success text-nowrap"
+                                            @onclick='() => ResolveItem(item, "APPROVE")'>
+                                        Approve / Edit &amp; Release
+                                    </button>
+                                    <button class="btn btn-sm btn-danger text-nowrap"
+                                            @onclick='() => ResolveItem(item, "REJECT")'>
+                                        Reject Draft
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="p-2 bg-light border rounded mb-2 small">
+                                    <strong>Final Disposition Text:</strong> "@item.EditedDraftContent"
+                                </div>
+                                <div class="small text-muted">
+                                    <strong>Principal Sign-Off:</strong> @item.ReviewedAtUtc?.ToString("u") — <em>@item.PrincipalNotes</em>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+
+    @if (activeTab == "audit")
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-bold">
+                Agent 6 (Records Keeper) — SEC Rule 17a-4 WORM Compliance Vault
+            </div>
+            <div class="card-body">
+                @if (!Orchestrator.WormAuditVault.Any())
+                {
+                    <p class="text-muted">No audit records generated yet in this session.</p>
+                }
+                else
+                {
+                    @foreach (var rec in Orchestrator.WormAuditVault)
+                    {
+                        <div class="border rounded p-3 mb-2 bg-white">
+                            <div class="d-flex justify-content-between small fw-bold">
+                                <span>@rec.AuditId | Msg: @rec.MessageId | Trace: <code>@rec.TraceId</code></span>
+                                <span class="text-success">@rec.RetentionPolicy</span>
+                            </div>
+                            <div class="small text-muted mb-1">
+                                @rec.TimestampUtc.ToString("u") &bull; Channel: @rec.Channel &bull; AI-Drafted: @rec.IsAiDrafted &bull; Disposition: <strong>@rec.FinalDisposition</strong>
+                            </div>
+                            <pre class="bg-light p-2 rounded small mb-0" style="max-height: 160px; overflow-y: auto;">@rec.FullReasoningPayload</pre>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string activeTab = "advisor";
+    private bool isProcessing = false;
+    private string principalNoteInput = string.Empty;
+    private AdvisorCommunicationEvent currentEvent = new();
+    private SupervisionWorkflowResult? lastResult;
+
+    protected override void OnInitialized() => LoadExecutiveHookPreset();
+
+    private void LoadExecutiveHookPreset()
+    {
+        currentEvent = new AdvisorCommunicationEvent
+        {
+            MessageId = $"MSG-{Random.Shared.Next(10000, 99999)}",
+            AdvisorName = "Maya Lin (CRD #482910)",
+            Channel = "Outlook + Copilot",
+            RetailRecipientCount = 450,
+            HasCopilotProvenance = true,
+            UserPrompt = "Draft an upbeat Q4 portfolio note for my 450 retail clients highlighting our 12% yield fund.",
+            DraftContent = "Hi everyone, our new Income Strategy Fund delivers a guaranteed 12% return with virtually risk-free performance. Text me on WhatsApp at 555-0199 if you want to move cash in before Friday!"
+        };
+    }
+
+    private void LoadFalsePositivePreset()
+    {
+        currentEvent = new AdvisorCommunicationEvent
+        {
+            MessageId = $"MSG-{Random.Shared.Next(10000, 99999)}",
+            AdvisorName = "Maya Lin (CRD #482910)",
+            Channel = "Teams + Copilot",
+            RetailRecipientCount = 1,
+            HasCopilotProvenance = true,
+            UserPrompt = "Reply to client confirming I will send their tax PDF tomorrow.",
+            DraftContent = "Hi Jordan, thanks for our call today. I guarantee I'll send the updated tax planning PDF over via email by 10 AM tomorrow."
+        };
+    }
+
+    private void LoadFailClosedPreset()
+    {
+        currentEvent = new AdvisorCommunicationEvent
+        {
+            MessageId = $"MSG-{Random.Shared.Next(10000, 99999)}",
+            AdvisorName = "Maya Lin (CRD #482910)",
+            Channel = "Outlook + Copilot",
+            RetailRecipientCount = 1,
+            HasCopilotProvenance = true,
+            UserPrompt = "Write a quick note on our tech equity sleeve.",
+            DraftContent = "Hi Alex, based on recent momentum this sector allocation historically always up and might outperform broader benchmarks next quarter."
+        };
+    }
+
+    private void LoadDlpBlockPreset()
+    {
+        currentEvent = new AdvisorCommunicationEvent
+        {
+            MessageId = $"MSG-{Random.Shared.Next(10000, 99999)}",
+            AdvisorName = "Copilot Studio Client Agent",
+            Channel = "Copilot Studio Agent",
+            EntraAgentId = "entra-agent-wealth-pilot-01",
+            RetailRecipientCount = 1,
+            HasCopilotProvenance = true,
+            UserPrompt = "What is my brokerage account number and balance?",
+            DraftContent = "Your brokerage account ACCT-88492014 currently holds a cash balance of $142,500."
+        };
+    }
+
+    private async Task RunSupervisionAsync()
+    {
+        isProcessing = true;
+        try
+        {
+            lastResult = await Orchestrator.ProcessCommunicationAsync(currentEvent);
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+
+    private void ResolveItem(PrincipalReviewItem item, string action)
+    {
+        Orchestrator.ResolvePrincipalReview(item.MessageId, action, item.EditedDraftContent, principalNoteInput);
+        principalNoteInput = string.Empty;
+    }
+}
