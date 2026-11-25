@@ -11,7 +11,8 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: .\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 9.0.x
-  WORKING_DIRECTORY: .
+  WEALTH_SUPERVISION_SOLUTION: .\src\WealthSupervisionDemo\WealthSupervisionDemo.slnx
+  WEALTH_SUPERVISION_PROJECT: .\src\WealthSupervisionDemo\WealthSupervisionDemo.csproj
 jobs:
   build:
     environment: SuperviseAIAssistedWealthMgmtComm_Env
@@ -24,13 +25,13 @@ jobs:
         dotnet-quality: preview
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      run: dotnet restore "${{ env.WEALTH_SUPERVISION_SOLUTION }}"
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "${{ env.WEALTH_SUPERVISION_SOLUTION }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+      run: dotnet test "${{ env.WEALTH_SUPERVISION_SOLUTION }}" --no-build
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.WEALTH_SUPERVISION_PROJECT }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Publish Artifacts
       uses: actions/upload-artifact@v4
       with:
